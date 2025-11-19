@@ -9,7 +9,7 @@ Proyek ini adalah implementasi dari **UmbraCode Forge** yang didukung oleh kemam
 ## 🔗 Akses Tools (Zero-Capital Asset)
 
 Akses dan gunakan *tools* ini secara GRATIS di sini:
-👉 **[https://resonansi7.github.io/json-to-md-tool/](https://resonansi7.github.io/json-to-md-tool/)**
+👉 **[https://resonansi7.github.com/json-to-md-tool/](https://resonansi7.github.io/json-to-md-tool/)**
 
 ## 💰 Dukungan Pengembangan & Apresiasi
 
