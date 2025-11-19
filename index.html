@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to Markdown Table Converter | Umbra Micro-SaaS</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #1e1e1e; color: #d4d4d4; }
+        .container { max-width: 900px; margin: auto; padding: 20px; background-color: #252526; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); }
+        h1 { color: #00bcd4; border-bottom: 2px solid #00bcd4; padding-bottom: 10px; }
+        textarea { width: 100%; height: 200px; padding: 10px; margin-bottom: 15px; border: 1px solid #333; background-color: #333; color: #f0f0f0; border-radius: 4px; resize: vertical; }
+        button { padding: 10px 20px; background-color: #00bcd4; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #008c9e; }
+        .footer { margin-top: 30px; text-align: center; border-top: 1px solid #333; padding-top: 15px; }
+        .saweria-link { color: #f9d800; text-decoration: none; font-weight: bold; }
+        .saweria-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON to Markdown Table Converter</h1>
+
+        <label for="json-input">Masukkan Objek JSON (Array of Objects):</label>
+        <textarea id="json-input" placeholder='Contoh: [{"name": "Umbra", "value": 99}, {"name": "NIK", "value": 77}]'></textarea>
+
+        <button onclick="convertToMarkdown()">Konversi ke Markdown</button>
+
+        <label for="markdown-output" style="margin-top: 20px; display: block;">Hasil Markdown:</label>
+        <textarea id="markdown-output" readonly placeholder="Hasil tabel Markdown akan muncul di sini..."></textarea>
+
+        <div class="footer">
+            <p>Tools ini dibuat dengan bantuan **UmbraCode Forge (Gemini 3.0)**.</p>
+            <p>Suka dengan Tools ini? Traktir kopi developer via 
+               <a href="https://saweria.co/glitchmaster" target="_blank" class="saweria-link">Saweria.co/glitchmaster</a>.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function convertToMarkdown() {
+            const jsonInput = document.getElementById('json-input').value;
+            const outputArea = document.getElementById('markdown-output');
+            
+            try {
+                // 1. Parsing JSON Input
+                const data = JSON.parse(jsonInput);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    outputArea.value = "Error: Input harus berupa Array of Objects non-kosong.";
+                    return;
+                }
+
+                // 2. Mendapatkan Header (Keys dari objek pertama)
+                const headers = Object.keys(data[0]);
+                if (headers.length === 0) {
+                    outputArea.value = "Error: Objek tidak memiliki kunci (header).";
+                    return;
+                }
+
+                let markdown = '';
+
+                // 3. Membuat Baris Header
+                markdown += '| ' + headers.join(' | ') + ' |\n';
+
+                // 4. Membuat Baris Separator Markdown
+                markdown += '|' + headers.map(() => ' --- ').join('|') + '|\n';
+
+                // 5. Membuat Baris Data
+                data.forEach(obj => {
+                    const rowValues = headers.map(header => {
+                        // Memastikan nilai di-string-kan agar aman di Markdown
+                        let value = obj[header] !== undefined && obj[header] !== null ? String(obj[header]) : '';
+                        // Mengganti pipe (|) agar tidak merusak tabel Markdown
+                        return value.replace(/\|/g, '&#124;');
+                    });
+                    markdown += '| ' + rowValues.join(' | ') + ' |\n';
+                });
+
+                // 6. Output ke Textarea
+                outputArea.value = markdown;
+
+            } catch (e) {
+                outputArea.value = 'ERROR PARSING JSON: Pastikan format JSON valid. ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
